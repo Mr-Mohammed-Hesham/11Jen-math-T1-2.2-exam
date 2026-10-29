@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📐 Pythagorean Theorem & Triangle Classification - رياضيات 11 عام | Mr. Mohammed Hesham</title>
+<meta name="description" content="امتحان تفاعلي شامل عن نظرية فيثاغورس وتصنيف المثلثات - رياضيات 11 عام">
+<meta name="author" content="Mr. Mohammed Hesham">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Inter:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body { font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); }
+body.en-mode { font-family: 'Inter', sans-serif; }
+.arabic-math { font-family: 'Amiri', 'Cairo', serif; }
+.correct { background-color: #dcfce7 !important; border-color: #16a34a !important; }
+.incorrect { background-color: #fee2e2 !important; border-color: #dc2626 !important; }
+.timer-warning { color: #dc2626 !important; animation: pulse 1s infinite; }
+@keyframes pulse { 50% { opacity: 0.7; } }
+@media print { .no-print { display: none !important; } }
+.success-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.875rem; }
+.grade-excellent { background: #dcfce7; color: #166534; }
+.grade-good { background: #fef3c7; color: #92400e; }
+.grade-pass { background: #dbeafe; color: #1e40af; }
+.grade-fail { background: #fee2e2; color: #991b1b; }
+.lang-switch { position: fixed; top: 16px; left: 16px; z-index: 100; background: white; padding: 6px; border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); display: flex; gap: 4px; border: 2px solid #d97706; }
+[dir="ltr"] .lang-switch { left: auto; right: 16px; }
+.lang-btn { padding: 6px 14px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: all 0.3s; border: none; font-size: 0.875rem; background: transparent; color: #6b7280; }
+.lang-btn.active { background: #d97706; color: white; box-shadow: 0 2px 6px rgba(217,119,6,0.4); }
+.shuffle-badge { display: inline-block; background: linear-gradient(135deg, #d97706, #b45309); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; margin-right: 8px; }
+.math-display { display: inline-block; direction: ltr; font-family: 'Amiri', serif; font-size: 1.2em; padding: 2px 8px; background: #fef3c7; border-radius: 6px; margin: 2px; color: #92400e; font-weight: 600; }
+.save-indicator { position: fixed; bottom: 20px; left: 20px; z-index: 200; background: #10b981; color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+.save-indicator.show { opacity: 1; }
+.formula-box { background: #fef3c7; border: 2px solid #f59e0b; border-radius: 8px; padding: 12px; margin: 10px 0; font-family: 'Amiri', serif; direction: ltr; text-align: center; }
+.svg-graph { display: block; margin: 12px auto; background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 8px; }
+.graph-container { text-align: center; margin: 10px 0; }
+.module-badge { display: inline-block; padding: 4px 16px; border-radius: 20px; font-weight: bold; font-size: 0.85rem; margin-bottom: 8px; }
+.module-1 { background: #fef3c7; color: #92400e; }
+.module-2 { background: #dbeafe; color: #1e40af; }
+.module-3 { background: #fce7f3; color: #9f1239; }
+.module-4 { background: #ecfdf5; color: #065f46; }
+.module-5 { background: #ede9fe; color: #5b21b6; }
+.module-6 { background: #fee2e2; color: #991b1b; }
+</style>
+</head>
+<body class="p-4 md:p-8 min-h-screen">
+
+<div class="lang-switch no-print">
+<button class="lang-btn active" onclick="setLanguage('ar')" id="btn-ar">عربي</button>
+<button class="lang-btn" onclick="setLanguage('en')" id="btn-en">EN</button>
+</div>
+
+<div id="saveIndicator" class="save-indicator">💾 <span data-ar="تم الحفظ" data-en="Saved">تم الحفظ</span></div>
+
+<div id="timer-container" class="max-w-5xl mx-auto mb-4 text-center no-print">
+<div class="bg-white p-4 rounded-2xl shadow-lg inline-block border-2 border-amber-100">
+<span class="text-gray-600 ml-2">⏰ الوقت المتبقي:</span>
+<span id="timer" class="text-2xl font-bold text-amber-700 font-mono">60:00</span>
+<span class="shuffle-badge">📐 Pythagorean Theorem - 30 سؤال</span>
+</div>
+</div>
+
+<div class="max-w-5xl mx-auto mb-6 flex flex-wrap gap-3 justify-center no-print">
+<button onclick="toggleAnswers()" class="bg-amber-700 hover:bg-amber-800 text-white px-5 py-2 rounded-xl font-medium transition shadow">👀 إظهار/إخفاء الإجابات</button>
+<button onclick="window.print()" class="bg-gray-700 hover:bg-gray-900 text-white px-5 py-2 rounded-xl font-medium transition shadow">️ طباعة</button>
+<button onclick="reshuffleExam()" class="bg-gradient-to-r from-amber-700 to-orange-600 hover:from-amber-800 hover:to-orange-700 text-white px-5 py-2 rounded-xl font-medium transition shadow">🔄 أسئلة جديدة</button>
+<button onclick="clearProgress()" class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-xl font-medium transition shadow">🗑️ مسح التقدم</button>
+</div>
+
+<header class="max-w-5xl mx-auto bg-white p-8 rounded-3xl shadow-2xl mb-8 border-4 border-amber-500">
+<div class="text-center">
+<div class="inline-block bg-amber-700 text-white px-6 py-2 rounded-full text-sm font-bold mb-4">MATH GRADE 11 - PYTHAGOREAN THEOREM</div>
+<h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">📐 نظرية فيثاغورس وتصنيف المثلثات</h1>
+<h2 class="text-xl text-amber-700 font-semibold mb-2">الصف الحادي عشر العام (رياضيات)</h2>
+<p class="text-sm text-green-600 font-semibold">💾 يتم حفظ تقدمك تلقائياً - 30 سؤالاً في 6 أقسام</p>
+</div>
+<div class="mt-6 flex flex-wrap justify-center gap-4 text-sm text-gray-600">
+<span>📅 التاريخ: <input type="text" id="examDate" class="border-b-2 border-amber-300 bg-transparent w-32 text-center"></span>
+<span>😊 الاسم: <input type="text" id="studentName" class="border-b-2 border-amber-300 bg-transparent w-40 text-center" placeholder="اكتب اسمك"></span>
+<span>🏫 الشعبة: <input type="text" id="studentClass" class="border-b-2 border-amber-300 bg-transparent w-32 text-center" placeholder="الشعبة"></span>
+<span>⏰ المدة: 60 دقيقة</span>
+<span>📊 المجموع: 100 درجة</span>
+</div>
+</header>
+
+<div class="max-w-5xl mx-auto mb-6 bg-white p-4 rounded-xl shadow-lg border-2 border-amber-200 no-print">
+<h3 class="font-bold text-lg mb-3 text-amber-800 text-center">📐 القوانين الأساسية</h3>
+<div class="grid md:grid-cols-3 gap-3 text-sm">
+<div class="formula-box"><strong>a² + b² = c²</strong><br>Pythagorean Theorem</div>
+<div class="formula-box"><strong>c² = a² + b² → Right</strong><br>c² > a² + b² → Obtuse</div>
+<div class="formula-box"><strong>c² < a² + b² → Acute</strong><br>(c is longest side)</div>
+<div class="formula-box"><strong>Triangle Inequality:</strong><br>a + b > c</div>
+<div class="formula-box"><strong>Common Triples:</strong><br>3,4,5 | 5,12,13 | 8,15,17</div>
+<div class="formula-box"><strong>More Triples:</strong><br>7,24,25 | 9,40,41 | 20,21,29</div>
+</div>
+</div>
+
+<main class="max-w-5xl mx-auto space-y-8" id="exam-content"></main>
+
+<div class="text-center no-print pb-8 mt-8">
+<button onclick="gradeExam()" class="bg-gradient-to-r from-amber-700 to-orange-600 hover:from-amber-800 hover:to-orange-700 text-white text-lg px-12 py-4 rounded-2xl font-bold shadow-xl transition transform hover:scale-105">🎯 صحح إجاباتي!</button>
+</div>
+
+<div id="results-panel" class="max-w-5xl mx-auto mt-8 bg-white p-8 rounded-3xl shadow-2xl border-4 border-amber-500 hidden no-print">
+<h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">🏆 نتيجتك يا بطل! 🏆</h2>
+<div class="grid md:grid-cols-3 gap-4 mb-6">
+<div class="bg-amber-50 p-4 rounded-xl text-center"><p>😊 الاسم</p><p id="res-name" class="font-bold text-xl text-amber-700">-</p></div>
+<div class="bg-orange-50 p-4 rounded-xl text-center"><p>📅 التاريخ</p><p id="res-date" class="font-bold text-xl text-orange-700">-</p></div>
+<div class="bg-amber-50 p-4 rounded-xl text-center"><p>🌟 المجموع</p><p id="res-total" class="font-bold text-3xl text-amber-700">0 / 100</p></div>
+</div>
+<div class="text-center mb-6">
+<span id="success-badge" class="success-badge grade-excellent">-</span>
+<p id="success-percent" class="text-4xl font-bold text-amber-700 mt-2">0%</p>
+<p class="text-sm text-gray-500">نسبة النجاح</p>
+</div>
+<div class="bg-gray-50 p-6 rounded-xl mb-6">
+<h3 class="font-bold text-lg mb-4 text-gray-800"> أدائك في كل قسم:</h3>
+<div class="space-y-3" id="sections-performance"></div>
+</div>
+<div class="text-center">
+<button id="sendEmailBtn" onclick="sendResultsToEmail()" class="bg-gradient-to-r from-amber-700 to-orange-600 text-white text-lg px-8 py-3 rounded-2xl font-bold shadow-xl transition">📧 أرسل النتيجة للمعلم</button>
+<p id="emailStatus" class="text-sm mt-2 text-center font-medium"></p>
+</div>
+</div>
+
+<footer class="max-w-5xl mx-auto mt-10 mb-8 text-center text-gray-500 text-sm no-print">
+© Pythagorean Theorem - Grade 11 | Mr. Mohammed Hesham 📐
+</footer>
+
+<script>
+const PUBLIC_KEY = "Rb3Lq8tXaFmc5YHUH";
+const SERVICE_ID = "service_w15m64i";
+const TEMPLATE_ID = "template_5b0u2tq";
+const TARGET_EMAIL = "mohammedhesham872@gmail.com";
+emailjs.init(PUBLIC_KEY);
+
+const STORAGE_KEY = 'pythagorean_grade11_exam_v1';
+const TOTAL_TIME = 3600;
+const TOTAL_QUESTIONS = 30;
+const TOTAL_SECTIONS = 6;
+const QUESTIONS_PER_SECTION = 5;
+
+let currentSeed = null;
+let answersVisible = false;
+let saveIndicatorTimeout = null;
+let currentLang = 'ar';
+let timeRemaining = TOTAL_TIME;
+let timerInterval;
+let examData;
+let correctAnswersMap = {};
+let rng = null;
+
+function mulberry32(a) {
+    return function() {
+        var t = a += 0x6D2B79F5;
+        t = Math.imul(t ^ t >>> 15, t | 1);
+        t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    }
+}
+
+function showSaveIndicator() {
+    const indicator = document.getElementById('saveIndicator');
+    indicator.classList.add('show');
+    if (saveIndicatorTimeout) clearTimeout(saveIndicatorTimeout);
+    saveIndicatorTimeout = setTimeout(() => indicator.classList.remove('show'), 1500);
+}
+
+function saveState(showIndicator = true) {
+    try {
+        const state = {
+            seed: currentSeed, lang: currentLang,
+            studentName: document.getElementById('studentName').value,
+            studentClass: document.getElementById('studentClass').value,
+            examDate: document.getElementById('examDate').value,
+            answers: getSelectedAnswers(),
+            timeRemaining: timeRemaining,
+            answersVisible: answersVisible, savedAt: Date.now()
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        if (showIndicator) showSaveIndicator();
+    } catch (e) { console.error('Save error:', e); }
+}
+
+function loadState() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        return saved ? JSON.parse(saved) : null;
+    } catch (e) { return null; }
+}
+
+function getSelectedAnswers() {
+    const answers = {};
+    for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+        const selected = document.querySelector('input[name="q'+i+'"]:checked');
+        if (selected) answers[i] = selected.value;
+    }
+    return answers;
+}
+
+function restoreAnswers(answers) {
+    if (!answers) return;
+    for (const [idx, val] of Object.entries(answers)) {
+        const radio = document.querySelector('input[name="q'+idx+'"][value="'+val+'"]');
+        if (radio) radio.checked = true;
+    }
+}
+
+function clearProgress() {
+    const msg = currentLang === 'ar' ? '️ هل أنت متأكد من مسح كل التقدم؟' : '⚠️ Clear all progress?';
+    if (confirm(msg)) { localStorage.removeItem(STORAGE_KEY); location.reload(); }
+}
+
+function setupAnswerListeners() {
+    document.getElementById('exam-content').addEventListener('change', (e) => {
+        if (e.target.type === 'radio') saveState();
+    });
+}
+
+function setupInputListeners() {
+    ['studentName', 'studentClass', 'examDate'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', () => saveState(false));
+            el.addEventListener('blur', () => saveState());
+        }
+    });
+}
+
+// ==================== SVG DIAGRAMS ====================
+const svgGraphs = {
+    right_triangle_hypotenuse: `<svg class="svg-graph" width="400" height="260" viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="250" rx="12" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#92400e" font-weight="bold">📐 إيجاد الوتر - Find Hypotenuse</text>
+        <polygon points="80,200 80,80 240,200" fill="#fde68a" stroke="#f59e0b" stroke-width="3"/>
+        <rect x="80" y="180" width="20" height="20" fill="none" stroke="#dc2626" stroke-width="2"/>
+        <text x="50" y="145" font-size="14" fill="#92400e" font-weight="bold">a</text>
+        <text x="160" y="225" font-size="14" fill="#92400e" font-weight="bold">b</text>
+        <text x="170" y="130" font-size="16" fill="#dc2626" font-weight="bold">c (hypotenuse)</text>
+        <text x="200" y="245" text-anchor="middle" font-size="13" fill="#92400e" font-family="'Amiri', serif">c² = a² + b² → c = √(a² + b²)</text>
+    </svg>`,
+    
+    right_triangle_leg: `<svg class="svg-graph" width="400" height="260" viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="250" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#1e40af" font-weight="bold">📐 إيجاد ضلع - Find Leg</text>
+        <polygon points="80,200 80,80 240,200" fill="#bfdbfe" stroke="#2563eb" stroke-width="3"/>
+        <rect x="80" y="180" width="20" height="20" fill="none" stroke="#dc2626" stroke-width="2"/>
+        <text x="50" y="145" font-size="14" fill="#1e40af" font-weight="bold">a = ?</text>
+        <text x="160" y="225" font-size="14" fill="#1e40af" font-weight="bold">b</text>
+        <text x="170" y="130" font-size="14" fill="#1e40af" font-weight="bold">c (hypotenuse)</text>
+        <text x="200" y="245" text-anchor="middle" font-size="13" fill="#1e40af" font-family="'Amiri', serif">a² = c² - b² → a = √(c² - b²)</text>
+    </svg>`,
+    
+    pythagorean_triples: `<svg class="svg-graph" width="400" height="280" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="270" rx="12" fill="#fce7f3" stroke="#ec4899" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#9f1239" font-weight="bold"> ثلاثيات فيثاغورس الشهيرة</text>
+        <rect x="20" y="45" width="170" height="50" rx="6" fill="#fbcfe8" stroke="#ec4899" stroke-width="2"/>
+        <text x="105" y="75" text-anchor="middle" font-size="13" fill="#9f1239" font-weight="bold">3, 4, 5</text>
+        <rect x="210" y="45" width="170" height="50" rx="6" fill="#fbcfe8" stroke="#ec4899" stroke-width="2"/>
+        <text x="295" y="75" text-anchor="middle" font-size="13" fill="#9f1239" font-weight="bold">5, 12, 13</text>
+        <rect x="20" y="105" width="170" height="50" rx="6" fill="#fbcfe8" stroke="#ec4899" stroke-width="2"/>
+        <text x="105" y="135" text-anchor="middle" font-size="13" fill="#9f1239" font-weight="bold">8, 15, 17</text>
+        <rect x="210" y="105" width="170" height="50" rx="6" fill="#fbcfe8" stroke="#ec4899" stroke-width="2"/>
+        <text x="295" y="135" text-anchor="middle" font-size="13" fill="#9f1239" font-weight="bold">7, 24, 25</text>
+        <rect x="20" y="165" width="170" height="50" rx="6" fill="#fbcfe8" stroke="#ec4899" stroke-width="2"/>
+        <text x="105" y="195" text-anchor="middle" font-size="13" fill="#9f1239" font-weight="bold">9, 40, 41</text>
+        <rect x="210" y="165" width="170" height="50" rx="6" fill="#fbcfe8" stroke="#ec4899" stroke-width="2"/>
+        <text x="295" y="195" text-anchor="middle" font-size="13" fill="#9f1239" font-weight="bold">20, 21, 29</text>
+        <text x="200" y="240" text-anchor="middle" font-size="11" fill="#9f1239">Multiply by k to get more triples!</text>
+        <text x="200" y="260" text-anchor="middle" font-size="11" fill="#9f1239">Example: 3,4,5 × 2 = 6,8,10</text>
+    </svg>`,
+    
+    triangle_classification: `<svg class="svg-graph" width="400" height="280" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="270" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#065f46" font-weight="bold"> تصنيف المثلثات حسب الزوايا</text>
+        <polygon points="50,200 150,80 250,200" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <text x="150" y="220" text-anchor="middle" font-size="11" fill="#065f46" font-weight="bold">Acute (حاد)</text>
+        <text x="150" y="240" text-anchor="middle" font-size="10" fill="#065f46">c² < a² + b²</text>
+        <polygon points="200,200 250,100 350,200" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <rect x="245" y="195" width="10" height="10" fill="none" stroke="#dc2626" stroke-width="2"/>
+        <text x="275" y="220" text-anchor="middle" font-size="11" fill="#065f46" font-weight="bold">Right (قائم)</text>
+        <text x="275" y="240" text-anchor="middle" font-size="10" fill="#065f46">c² = a² + b²</text>
+        <polygon points="150,250 200,170 300,250" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <text x="225" y="268" text-anchor="middle" font-size="11" fill="#065f46" font-weight="bold">Obtuse (منفرج)</text>
+        <text x="225" y="282" text-anchor="middle" font-size="10" fill="#065f46">c² > a² + b²</text>
+    </svg>`,
+    
+    triangle_inequality: `<svg class="svg-graph" width="400" height="240" viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="230" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#5b21b6" font-weight="bold">⚖️ متباينة المثلث - Triangle Inequality</text>
+        <polygon points="100,180 200,60 300,180" fill="#ddd6fe" stroke="#7c3aed" stroke-width="3"/>
+        <text x="130" y="130" font-size="14" fill="#5b21b6" font-weight="bold">a</text>
+        <text x="260" y="130" font-size="14" fill="#5b21b6" font-weight="bold">b</text>
+        <text x="200" y="200" text-anchor="middle" font-size="14" fill="#5b21b6" font-weight="bold">c</text>
+        <text x="200" y="220" text-anchor="middle" font-size="12" fill="#5b21b6" font-family="'Amiri', serif">a + b > c</text>
+        <text x="200" y="238" text-anchor="middle" font-size="11" fill="#5b21b6">(sum of any two sides > third side)</text>
+    </svg>`,
+    
+    example_problem: `<svg class="svg-graph" width="400" height="280" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="270" rx="12" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#991b1b" font-weight="bold"> مثال: أضلاع 12, 16, x</text>
+        <polygon points="80,220 80,100 220,220" fill="#fecaca" stroke="#dc2626" stroke-width="3"/>
+        <rect x="80" y="200" width="20" height="20" fill="none" stroke="#dc2626" stroke-width="2"/>
+        <text x="50" y="165" font-size="14" fill="#991b1b" font-weight="bold">16</text>
+        <text x="150" y="240" font-size="14" fill="#991b1b" font-weight="bold">12</text>
+        <text x="170" y="150" font-size="16" fill="#dc2626" font-weight="bold">x = ?</text>
+        <text x="200" y="260" text-anchor="middle" font-size="12" fill="#991b1b" font-family="'Amiri', serif">x² = 12² + 16² = 144 + 256 = 400</text>
+        <text x="200" y="278" text-anchor="middle" font-size="14" fill="#dc2626" font-weight="bold">x = 20 ✓ (3,4,5 × 4)</text>
+    </svg>`
+};
+
+// ==================== EXAM DATA - 30 QUESTIONS ====================
+const originalExamData = {
+    sections: [
+        {
+            id: 'sec1',
+            title: { ar: '🔹 القسم 1: إيجاد الوتر (Hypotenuse) (Q1-Q5)', en: '🔹 Section 1: Find Hypotenuse (Q1-Q5)' },
+            questions: [
+                {
+                    q: { ar: 'مثلث قائم الزاوية طولا ضلعيه 12 و 16. ما طول الوتر x؟', en: 'Right triangle with legs 12 and 16. What is hypotenuse x?' },
+                    svg: svgGraphs.example_problem,
+                    options: [
+                        { ar: '<span class="math-display">x = 20</span>', en: '<span class="math-display">x = 20</span>' },
+                        { ar: '<span class="math-display">x = 28</span>', en: '<span class="math-display">x = 28</span>' },
+                        { ar: '<span class="math-display">x = 4</span>', en: '<span class="math-display">x = 4</span>' },
+                        { ar: '<span class="math-display">x = 14</span>', en: '<span class="math-display">x = 14</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'x² = 12² + 16² = 144 + 256 = 400 → x = 20 (ثلاثية 3,4,5 مضروبة في 4)', en: 'x² = 12² + 16² = 400 → x = 20 (3,4,5 triple × 4)' }
+                },
+                {
+                    q: { ar: 'مثلث قائم الزاوية طولا ضلعيه 9 و 12. ما طول الوتر؟', en: 'Right triangle with legs 9 and 12. What is hypotenuse?' },
+                    options: [
+                        { ar: '<span class="math-display">15</span>', en: '<span class="math-display">15</span>' },
+                        { ar: '<span class="math-display">21</span>', en: '<span class="math-display">21</span>' },
+                        { ar: '<span class="math-display">√225</span>', en: '<span class="math-display">√225</span>' },
+                        { ar: '<span class="math-display">7</span>', en: '<span class="math-display">7</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'x² = 9² + 12² = 81 + 144 = 225 → x = 15 (ثلاثية 3,4,5 مضروبة في 3)', en: 'x² = 9² + 12² = 225 → x = 15 (3,4,5 triple × 3)' }
+                },
+                {
+                    q: { ar: 'مثلث قائم الزاوية طولا ضلعيه 5 و 12. ما طول الوتر؟', en: 'Right triangle with legs 5 and 12. What is hypotenuse?' },
+                    options: [
+                        { ar: '<span class="math-display">13</span>', en: '<span class="math-display">13</span>' },
+                        { ar: '<span class="math-display">17</span>', en: '<span class="math-display">17</span>' },
+                        { ar: '<span class="math-display">7</span>', en: '<span class="math-display">7</span>' },
+                        { ar: '<span class="math-display">√119</span>', en: '<span class="math-display">√119</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'x² = 5² + 12² = 25 + 144 = 169 → x = 13 (ثلاثية 5,12,13)', en: 'x² = 5² + 12² = 169 → x = 13 (5,12,13 triple)' }
+                },
+                {
+                    q: { ar: 'مثلث قائم الزاوية طولا ضلعيه 8 و 15. ما طول الوتر؟', en: 'Right triangle with legs 8 and 15. What is hypotenuse?' },
+                    options: [
+                        { ar: '<span class="math-display">17</span>', en: '<span class="math-display">17</span>' },
+                        { ar: '<span class="math-display">23</span>', en: '<span class="math-display">23</span>' },
+                        { ar: '<span class="math-display">7</span>', en: '<span class="math-display">7</span>' },
+                        { ar: '<span class="math-display">√289</span>', en: '<span class="math-display">√289</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'x² = 8² + 15² = 64 + 225 = 289 → x = 17 (ثلاثية 8,15,17)', en: 'x² = 8² + 15² = 289 → x = 17 (8,15,17 triple)' }
+                },
+                {
+                    q: { ar: 'مثلث قائم الزاوية طولا ضلعيه 7 و 24. ما طول الوتر؟', en: 'Right triangle with legs 7 and 24. What is hypotenuse?' },
+                    options: [
+                        { ar: '<span class="math-display">25</span>', en: '<span class="math-display">25</span>' },
+                        { ar: '<span class="math-display">31</span>', en: '<span class="math-display">31</span>' },
+                        { ar: '<span class="math-display">17</span>', en: '<span class="math-display">17</span>' },
+                        { ar: '<span class="math-display">√625</span>', en: '<span class="math-display">√625</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'x² = 7² + 24² = 49 + 576 = 625 → x = 25 (ثلاثية 7,24,25)', en: 'x² = 7² + 24² = 625 → x = 25 (7,24,25 triple)' }
+                }
+            ]
+        },
+        {
+            id: 'sec2',
+            title: { ar: ' القسم 2: إيجاد الضلع (Leg) (Q6-Q10)', en: ' Section 2: Find Leg (Q6-Q10)' },
+            questions: [
+                {
+                    q: { ar: 'مثلث قائم الزاوية الوتر = 15 وأحد الضلعين = 9. ما الضلع الآخر x؟', en: 'Right triangle: hypotenuse = 15, one leg = 9. What is other leg x?' },
+                    svg: svgGraphs.right_triangle_leg,
+                    options: [
+                        { ar: '<span class="math-display">x = 12</span>', en: '<span class="math-display">x = 12</span>' },
+                        { ar: '<span class="math-display">x = 24</span>', en: '<span class="math-display">x = 24</span>' },
+                        { ar: '<span class="math-display">x = 6</span>', en: '<span class="math-display">x = 6</span>' },
+                        { ar: '<span class="math-display">x = √306</span>', en: '<span class="math-display">x = √306</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'x² = 15² - 9² = 225 - 81 = 144 → x = 12 (ثلاثية 9,12,15 = 3,4,5 × 3)', en: 'x² = 15² - 9² = 144 → x = 12 (9,12,15 = 3,4,5 × 3)' }
+                },
+                {
+                    q: { ar: 'مثلث قائم الزاوية الوتر = 5 وأحد الضلعين = 2. ما الضلع الآخر x؟', en: 'Right triangle: hypotenuse = 5, one leg = 2. What is other leg x?' },
+                    options: [
+                        { ar: '<span class="math-display">x = √21 ≈ 4.6</span>', en: '<span class="math-display">x = √21 ≈ 4.6</span>' },
+                        { ar: '<span class="math-display">x = 7</span>', en: '<span class="math-display">x = 7</span>' },
+                        { ar: '<span class="math-display">x = 3</span>', en: '<span class="math-display">x = 3</span>' },
+                        { ar: '<span class="math-display">x = √29</span>', en: '<span class="math-display">x = √29</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'x² = 5² - 2² = 25 - 4 = 21 → x = √21 ≈ 4.6', en: 'x² = 5² - 2² = 21 → x = √21 ≈ 4.6' }
+                },
+                {
+                    q: { ar: 'مثلث قائم الزاوية الوتر = 13 وأحد الضلعين = 5. ما الضلع الآخر؟', en: 'Right triangle: hypotenuse = 13, one leg = 5. What is other leg?' },
+                    options: [
+                        { ar: '<span class="math-display">12</span>', en: '<span class="math-display">12</span>' },
+                        { ar: '<span class="math-display">8</span>', en: '<span class="math-display">8</span>' },
+                        { ar: '<span class="math-display">18</span>', en: '<span class="math-display">18</span>' },
+                        { ar: '<span class="math-display">√194</span>', en: '<span class="math-display">√194</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'x² = 13² - 5² = 169 - 25 = 144 → x = 12 (ثلاثية 5,12,13)', en: 'x² = 13² - 5² = 144 → x = 12 (5,12,13 triple)' }
+                },
+                {
+                    q: { ar: 'مثلث قائم الزاوية الوتر = 25 وأحد الضلعين = 24. ما الضلع الآخر؟', en: 'Right triangle: hypotenuse = 25, one leg = 24. What is other leg?' },
+                    options: [
+                        { ar: '<span class="math-display">7</span>', en: '<span class="math-display">7</span>' },
+                        { ar: '<span class="math-display">1</span>', en: '<span class="math-display">1</span>' },
+                        { ar: '<span class="math-display">49</span>', en: '<span class="math-display">49</span>' },
+                        { ar: '<span class="math-display">√49</span>', en: '<span class="math-display">√49</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'x² = 25² - 24² = 625 - 576 = 49 → x = 7 (ثلاثية 7,24,25)', en: 'x² = 25² - 24² = 49 → x = 7 (7,24,25 triple)' }
+                },
+                {
+                    q: { ar: 'مثلث قائم الزاوية الوتر = 17 وأحد الضلعين = 15. ما الضلع الآخر؟', en: 'Right triangle: hypotenuse = 17, one leg = 15. What is other leg?' },
+                    options: [
+                        { ar: '<span class="math-display">8</span>', en: '<span class="math-display">8</span>' },
+                        { ar: '<span class="math-display">2</span>', en: '<span class="math-display">2</span>' },
+                        { ar: '<span class="math-display">32</span>', en: '<span class="math-display">32</span>' },
+                        { ar: '<span class="math-display">√64</span>', en: '<span class="math-display">√64</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'x² = 17² - 15² = 289 - 225 = 64 → x = 8 (ثلاثية 8,15,17)', en: 'x² = 17² - 15² = 64 → x = 8 (8,15,17 triple)' }
+                }
+            ]
+        },
+        {
+            id: 'sec3',
+            title: { ar: '🔹 القسم 3: ثلاثيات فيثاغورس (Q11-Q15)', en: '🔹 Section 3: Pythagorean Triples (Q11-Q15)' },
+            questions: [
+                {
+                    q: { ar: 'أي من التالي يمثل ثلاثية فيثاغورس؟', en: 'Which of the following is a Pythagorean triple?' },
+                    svg: svgGraphs.pythagorean_triples,
+                    options: [
+                        { ar: '<span class="math-display">5, 12, 13</span>', en: '<span class="math-display">5, 12, 13</span>' },
+                        { ar: '<span class="math-display">4, 5, 6</span>', en: '<span class="math-display">4, 5, 6</span>' },
+                        { ar: '<span class="math-display">2, 3, 4</span>', en: '<span class="math-display">2, 3, 4</span>' },
+                        { ar: '<span class="math-display">6, 7, 8</span>', en: '<span class="math-display">6, 7, 8</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: '5² + 12² = 25 + 144 = 169 = 13² ✓', en: '5² + 12² = 25 + 144 = 169 = 13² ✓' }
+                },
+                {
+                    q: { ar: 'مثلث أضلاعه 16, 30, x. إذا كان قائم الزاوية، ما x؟ (استخدم ثلاثية 8,15,17)', en: 'Triangle sides 16, 30, x. If right triangle, what is x? (Use 8,15,17 triple)' },
+                    options: [
+                        { ar: '<span class="math-display">x = 34</span>', en: '<span class="math-display">x = 34</span>' },
+                        { ar: '<span class="math-display">x = 46</span>', en: '<span class="math-display">x = 46</span>' },
+                        { ar: '<span class="math-display">x = 14</span>', en: '<span class="math-display">x = 14</span>' },
+                        { ar: '<span class="math-display">x = 17</span>', en: '<span class="math-display">x = 17</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: '16 = 8×2, 30 = 15×2, إذن x = 17×2 = 34', en: '16 = 8×2, 30 = 15×2, so x = 17×2 = 34' }
+                },
+                {
+                    q: { ar: 'مثلث أضلاعه 14, 48, x. إذا كان قائم الزاوية، ما x؟ (استخدم ثلاثية 7,24,25)', en: 'Triangle sides 14, 48, x. If right triangle, what is x? (Use 7,24,25 triple)' },
+                    options: [
+                        { ar: '<span class="math-display">x = 50</span>', en: '<span class="math-display">x = 50</span>' },
+                        { ar: '<span class="math-display">x = 62</span>', en: '<span class="math-display">x = 62</span>' },
+                        { ar: '<span class="math-display">x = 34</span>', en: '<span class="math-display">x = 34</span>' },
+                        { ar: '<span class="math-display">x = 25</span>', en: '<span class="math-display">x = 25</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: '14 = 7×2, 48 = 24×2, إذن x = 25×2 = 50', en: '14 = 7×2, 48 = 24×2, so x = 25×2 = 50' }
+                },
+                {
+                    q: { ar: 'مثلث أضلاعه 10, 24, x. إذا كان قائم الزاوية، ما x؟', en: 'Triangle sides 10, 24, x. If right triangle, what is x?' },
+                    options: [
+                        { ar: '<span class="math-display">x = 26</span>', en: '<span class="math-display">x = 26</span>' },
+                        { ar: '<span class="math-display">x = 34</span>', en: '<span class="math-display">x = 34</span>' },
+                        { ar: '<span class="math-display">x = 14</span>', en: '<span class="math-display">x = 14</span>' },
+                        { ar: '<span class="math-display">x = 25</span>', en: '<span class="math-display">x = 25</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: '10 = 5×2, 24 = 12×2, إذن x = 13×2 = 26 (ثلاثية 5,12,13 مضروبة في 2)', en: '10 = 5×2, 24 = 12×2, so x = 13×2 = 26 (5,12,13 triple × 2)' }
+                },
+                {
+                    q: { ar: 'أي مجموعة تمثل ثلاثية فيثاغورس؟', en: 'Which set represents a Pythagorean triple?' },
+                    options: [
+                        { ar: '<span class="math-display">9, 40, 41</span>', en: '<span class="math-display">9, 40, 41</span>' },
+                        { ar: '<span class="math-display">9, 10, 11</span>', en: '<span class="math-display">9, 10, 11</span>' },
+                        { ar: '<span class="math-display">6, 8, 11</span>', en: '<span class="math-display">6, 8, 11</span>' },
+                        { ar: '<span class="math-display">10, 20, 30</span>', en: '<span class="math-display">10, 20, 30</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: '9² + 40² = 81 + 1600 = 1681 = 41² ✓', en: '9² + 40² = 81 + 1600 = 1681 = 41² ✓' }
+                }
+            ]
+        },
+        {
+            id: 'sec4',
+            title: { ar: '🔹 القسم 4: شرط وجود المثلث (Q16-Q20)', en: '🔹 Section 4: Triangle Inequality (Q16-Q20)' },
+            questions: [
+                {
+                    q: { ar: 'هل الأعداد 3, 4, 8 يمكن أن تكون أضلاع مثلث؟', en: 'Can 3, 4, 8 be sides of a triangle?' },
+                    svg: svgGraphs.triangle_inequality,
+                    options: [
+                        { ar: 'لا، لأن 3 + 4 = 7 < 8', en: 'No, because 3 + 4 = 7 < 8' },
+                        { ar: 'نعم', en: 'Yes' },
+                        { ar: 'لا، لأن 3 + 8 < 4', en: 'No, because 3 + 8 < 4' },
+                        { ar: 'نعم، مثلث قائم', en: 'Yes, right triangle' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'لا، لأن مجموع أي ضلعين يجب أن يكون أكبر من الثالث. 3 + 4 = 7 < 8', en: 'No, because sum of any two sides must be greater than third. 3 + 4 = 7 < 8' }
+                },
+                {
+                    q: { ar: 'هل الأعداد 5, 12, 13 يمكن أن تكون أضلاع مثلث؟', en: 'Can 5, 12, 13 be sides of a triangle?' },
+                    options: [
+                        { ar: 'نعم، مثلث قائم الزاوية', en: 'Yes, right triangle' },
+                        { ar: 'لا', en: 'No' },
+                        { ar: 'نعم، مثلث حاد الزاوية', en: 'Yes, acute triangle' },
+                        { ar: 'نعم، مثلث منفرج الزاوية', en: 'Yes, obtuse triangle' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'نعم، 5 + 12 > 13 ✓ و 5² + 12² = 13² → مثلث قائم', en: 'Yes, 5 + 12 > 13 ✓ and 5² + 12² = 13² → right triangle' }
+                },
+                {
+                    q: { ar: 'هل الأعداد 7, 10, 20 يمكن أن تكون أضلاع مثلث؟', en: 'Can 7, 10, 20 be sides of a triangle?' },
+                    options: [
+                        { ar: 'لا، لأن 7 + 10 = 17 < 20', en: 'No, because 7 + 10 = 17 < 20' },
+                        { ar: 'نعم', en: 'Yes' },
+                        { ar: 'نعم، مثلث منفرج', en: 'Yes, obtuse triangle' },
+                        { ar: 'لا، لأن 7 + 20 < 10', en: 'No, because 7 + 20 < 10' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'لا، لأن 7 + 10 = 17 < 20 (ينتهك متباينة المثلث)', en: 'No, because 7 + 10 = 17 < 20 (violates triangle inequality)' }
+                },
+                {
+                    q: { ar: 'أي مجموعة تمثل أضلاع مثلث قائم الزاوية؟', en: 'Which set represents sides of a right triangle?' },
+                    options: [
+                        { ar: '<span class="math-display">6, 8, 10</span>', en: '<span class="math-display">6, 8, 10</span>' },
+                        { ar: '<span class="math-display">4, 5, 6</span>', en: '<span class="math-display">4, 5, 6</span>' },
+                        { ar: '<span class="math-display">2, 3, 4</span>', en: '<span class="math-display">2, 3, 4</span>' },
+                        { ar: '<span class="math-display">5, 5, 5</span>', en: '<span class="math-display">5, 5, 5</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: '6² + 8² = 36 + 64 = 100 = 10² ✓ (ثلاثية 3,4,5 مضروبة في 2)', en: '6² + 8² = 36 + 64 = 100 = 10² ✓ (3,4,5 triple × 2)' }
+                },
+                {
+                    q: { ar: 'ما شرط متباينة المثلث؟', en: 'What is the triangle inequality condition?' },
+                    options: [
+                        { ar: 'مجموع أي ضلعين أكبر من الضلع الثالث', en: 'Sum of any two sides greater than third side' },
+                        { ar: 'مجموع الضلعين يساوي الثالث', en: 'Sum of two sides equals third' },
+                        { ar: 'مجموع الضلعين أصغر من الثالث', en: 'Sum of two sides less than third' },
+                        { ar: 'لا شرط', en: 'No condition' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'a + b > c, a + c > b, b + c > a (مجموع أي ضلعين > الثالث)', en: 'a + b > c, a + c > b, b + c > a (sum of any two > third)' }
+                }
+            ]
+        },
+        {
+            id: 'sec5',
+            title: { ar: '🔹 القسم 5: تصنيف المثلثات - قائم (Q21-Q25)', en: '🔹 Section 5: Classify Triangles - Right (Q21-Q25)' },
+            questions: [
+                {
+                    q: { ar: 'مثلث أضلاعه 15, 36, 39. ما نوعه؟', en: 'Triangle with sides 15, 36, 39. What type?' },
+                    svg: svgGraphs.triangle_classification,
+                    options: [
+                        { ar: 'قائم الزاوية (لأن 15² + 36² = 39²)', en: 'Right (because 15² + 36² = 39²)' },
+                        { ar: 'حاد الزاوية', en: 'Acute' },
+                        { ar: 'منفرج الزاوية', en: 'Obtuse' },
+                        { ar: 'ليس مثلثاً', en: 'Not a triangle' }
+                    ],
+                    correct: 0,
+                    answer: { ar: '15² + 36² = 225 + 1296 = 1521 = 39² → مثلث قائم (ثلاثية 5,12,13 × 3)', en: '15² + 36² = 1521 = 39² → right triangle (5,12,13 triple × 3)' }
+                },
+                {
+                    q: { ar: 'مثلث أضلاعه 9, 12, 15. ما نوعه؟', en: 'Triangle with sides 9, 12, 15. What type?' },
+                    options: [
+                        { ar: 'قائم الزاوية', en: 'Right triangle' },
+                        { ar: 'حاد الزاوية', en: 'Acute' },
+                        { ar: 'منفرج الزاوية', en: 'Obtuse' },
+                        { ar: 'متساوي الأضلاع', en: 'Equilateral' }
+                    ],
+                    correct: 0,
+                    answer: { ar: '9² + 12² = 81 + 144 = 225 = 15² → مثلث قائم (3,4,5 × 3)', en: '9² + 12² = 225 = 15² → right triangle (3,4,5 × 3)' }
+                },
+                {
+                    q: { ar: 'مثلث أضلاعه 20, 21, 29. ما نوعه؟', en: 'Triangle with sides 20, 21, 29. What type?' },
+                    options: [
+                        { ar: 'قائم الزاوية', en: 'Right triangle' },
+                        { ar: 'حاد الزاوية', en: 'Acute' },
+                        { ar: 'منفرج الزاوية', en: 'Obtuse' },
+                        { ar: 'ليس مثلثاً', en: 'Not a triangle' }
+                    ],
+                    correct: 0,
+                    answer: { ar: '20² + 21² = 400 + 441 = 841 = 29² → مثلث قائم', en: '20² + 21² = 841 = 29² → right triangle' }
+                },
+                {
+                    q: { ar: 'مثلث أضلاعه 11, 60, 61. ما نوعه؟', en: 'Triangle with sides 11, 60, 61. What type?' },
+                    options: [
+                        { ar: 'قائم الزاوية', en: 'Right triangle' },
+                        { ar: 'حاد الزاوية', en: 'Acute' },
+                        { ar: 'منفرج الزاوية', en: 'Obtuse' },
+                        { ar: 'متساوي الساقين', en: 'Isosceles' }
+                    ],
+                    correct: 0,
+                    answer: { ar: '11² + 60² = 121 + 3600 = 3721 = 61² → مثلث قائم', en: '11² + 60² = 3721 = 61² → right triangle' }
+                },
+                {
+                    q: { ar: 'مثلث أضلاعه 28, 45, 53. ما نوعه؟', en: 'Triangle with sides 28, 45, 53. What type?' },
+                    options: [
+                        { ar: 'قائم الزاوية', en: 'Right triangle' },
+                        { ar: 'حاد الزاوية', en: 'Acute' },
+                        { ar: 'منفرج الزاوية', en: 'Obtuse' },
+                        { ar: 'ليس مثلثاً', en: 'Not a triangle' }
+                    ],
+                    correct: 0,
+                    answer: { ar: '28² + 45² = 784 + 2025 = 2809 = 53² → مثلث قائم', en: '28² + 45² = 2809 = 53² → right triangle' }
+                }
+            ]
+        },
+        {
+            id: 'sec6',
+            title: { ar: '🔹 القسم 6: تصنيف المثلثات - حاد ومنفرج (Q26-Q30)', en: '🔹 Section 6: Classify Triangles - Acute & Obtuse (Q26-Q30)' },
+            questions: [
+                {
+                    q: { ar: 'مثلث أضلاعه 16, 18, 26. ما نوعه؟', en: 'Triangle with sides 16, 18, 26. What type?' },
+                    options: [
+                        { ar: 'منفرج الزاوية (لأن 26² > 16² + 18²)', en: 'Obtuse (because 26² > 16² + 18²)' },
+                        { ar: 'حاد الزاوية', en: 'Acute' },
+                        { ar: 'قائم الزاوية', en: 'Right' },
+                        { ar: 'ليس مثلثاً', en: 'Not a triangle' }
+                    ],
+                    correct: 0,
+                    answer: { ar: '26² = 676, 16² + 18² = 256 + 324 = 580. 676 > 580 → منفرج', en: '26² = 676, 16² + 18² = 580. 676 > 580 → obtuse' }
+                },
+                {
+                    q: { ar: 'مثلث أضلاعه 15, 20, 24. ما نوعه؟', en: 'Triangle with sides 15, 20, 24. What type?' },
+                    options: [
+                        { ar: 'حاد الزاوية (لأن 24² < 15² + 20²)', en: 'Acute (because 24² < 15² + 20²)' },
+                        { ar: 'قائم الزاوية', en: 'Right' },
+                        { ar: 'منفرج الزاوية', en: 'Obtuse' },
+                        { ar: 'ليس مثلثاً', en: 'Not a triangle' }
+                    ],
+                    correct: 0,
+                    answer: { ar: '24² = 576, 15² + 20² = 225 + 400 = 625. 576 < 625 → حاد', en: '24² = 576, 15² + 20² = 625. 576 < 625 → acute' }
+                },
+                {
+                    q: { ar: 'مثلث أضلاعه 10, 12, 23. هل يمكن أن يكون مثلثاً؟', en: 'Triangle with sides 10, 12, 23. Can it be a triangle?' },
+                    options: [
+                        { ar: 'لا، لأن 10 + 12 = 22 < 23', en: 'No, because 10 + 12 = 22 < 23' },
+                        { ar: 'نعم، منفرج الزاوية', en: 'Yes, obtuse' },
+                        { ar: 'نعم، حاد الزاوية', en: 'Yes, acute' },
+                        { ar: 'نعم، قائم الزاوية', en: 'Yes, right' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'لا، لأن 10 + 12 = 22 < 23 (ينتهك متباينة المثلث)', en: 'No, because 10 + 12 = 22 < 23 (violates triangle inequality)' }
+                },
+                {
+                    q: { ar: 'مثلث أضلاعه 8, 15, 17. ما نوعه؟', en: 'Triangle with sides 8, 15, 17. What type?' },
+                    options: [
+                        { ar: 'قائم الزاوية', en: 'Right triangle' },
+                        { ar: 'حاد الزاوية', en: 'Acute' },
+                        { ar: 'منفرج الزاوية', en: 'Obtuse' },
+                        { ar: 'متساوي الأضلاع', en: 'Equilateral' }
+                    ],
+                    correct: 0,
+                    answer: { ar: '8² + 15² = 64 + 225 = 289 = 17² → مثلث قائم', en: '8² + 15² = 289 = 17² → right triangle' }
+                },
+                {
+                    q: { ar: 'مثلث أضلاعه 5, 5, 5. ما نوعه؟', en: 'Triangle with sides 5, 5, 5. What type?' },
+                    options: [
+                        { ar: 'حاد الزاوية (ومتساوي الأضلاع)', en: 'Acute (and equilateral)' },
+                        { ar: 'قائم الزاوية', en: 'Right' },
+                        { ar: 'منفرج الزاوية', en: 'Obtuse' },
+                        { ar: 'ليس مثلثاً', en: 'Not a triangle' }
+                    ],
+                    correct: 0,
+                    answer: { ar: '5² = 25, 5² + 5² = 50. 25 < 50 → حاد. وهو متساوي الأضلاع (كل زواياه 60°)', en: '5² = 25, 5² + 5² = 50. 25 < 50 → acute. Equilateral (all angles 60°)' }
+                }
+            ]
+        }
+    ]
+};
+
+function shuffleArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function prepareShuffledExam() {
+    rng = mulberry32(currentSeed);
+    examData = JSON.parse(JSON.stringify(originalExamData));
+    correctAnswersMap = {};
+    let globalIdx = 0;
+    examData.sections.forEach((section) => {
+        section.questions = shuffleArray(section.questions);
+        section.questions.forEach((q) => {
+            const optionsWithCorrect = q.options.map((opt, idx) => ({ option: opt, isCorrect: idx === q.correct }));
+            const shuffledOptions = shuffleArray(optionsWithCorrect);
+            q.options = shuffledOptions.map(o => o.option);
+            q.correct = shuffledOptions.findIndex(o => o.isCorrect);
+            correctAnswersMap[globalIdx] = String.fromCharCode(97 + q.correct);
+            globalIdx++;
+        });
+    });
+}
+
+function reshuffleExam() {
+    const msg = currentLang === 'ar' ? '🔄 سيتم إنشاء أسئلة جديدة ومسح إجاباتك. هل أنت متأكد؟' : ' New questions will be generated. Are you sure?';
+    if (confirm(msg)) {
+        currentSeed = Date.now(); timeRemaining = TOTAL_TIME; answersVisible = false;
+        prepareShuffledExam(); renderExam(); saveState();
+        alert(currentLang === 'ar' ? '🎲 تم تغيير الأسئلة! حظاً موفقاً! 🍀' : ' Questions changed! Good luck! 🍀');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function setLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.body.classList.toggle('en-mode', lang === 'en');
+    renderExam(); saveState(false);
+}
+
+function renderExam() {
+    const container = document.getElementById('exam-content');
+    const labels = { ar: { option: ['أ', 'ب', 'ج', 'د'], answer: '✅ الإجابة:' }, en: { option: ['A', 'B', 'C', 'D'], answer: '✅ Answer:' } };
+    const lbl = labels[currentLang];
+    let html = '';
+    let globalIdx = 0;
+    
+    examData.sections.forEach((section, secIdx) => {
+        const badgeClass = ['module-1', 'module-2', 'module-3', 'module-4', 'module-5', 'module-6'][secIdx];
+        html += '<section class="bg-white p-6 rounded-2xl shadow-lg border-2 border-amber-100">';
+        html += '<div class="text-center mb-4"><span class="module-badge ' + badgeClass + '">' + section.title[currentLang] + '</span></div>';
+        html += '<ol class="space-y-4 text-sm">';
+        
+        section.questions.forEach((q) => {
+            html += '<li class="border-r-4 border-amber-400 pr-4 py-2" id="q-' + globalIdx + '">';
+            html += '<strong class="text-amber-700">' + (globalIdx + 1) + '.</strong> <span class="arabic-math">' + q.q[currentLang] + '</span><br>';
+            if (q.svg) html += '<div class="graph-container">' + q.svg + '</div>';
+            
+            q.options.forEach((opt, oIdx) => {
+                html += '<label class="cursor-pointer block mt-2 mr-4 hover:bg-amber-50 rounded-lg p-2 transition">';
+                html += '<input type="radio" name="q' + globalIdx + '" value="' + String.fromCharCode(97 + oIdx) + '" class="mr-2 ml-2">';
+                html += '<span class="arabic-math">' + lbl.option[oIdx] + ') ' + opt[currentLang] + '</span>';
+                html += '</label>';
+            });
+            
+            html += '<div class="answer-box text-green-700 mt-3 font-medium ' + (answersVisible ? '' : 'hidden') + ' bg-green-50 rounded-lg p-3 border border-green-200">';
+            html += lbl.answer + ' ' + lbl.option[q.correct] + ') <span class="arabic-math">' + q.options[q.correct][currentLang] + '</span><br>';
+            html += '<span class="text-sm text-green-700 mt-2 block arabic-math">' + q.answer[currentLang] + '</span>';
+            html += '</div></li>';
+            globalIdx++;
+        });
+        
+        html += '</ol></section>';
+    });
+    
+    container.innerHTML = html;
+}
+
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeRemaining--;
+        updateTimerDisplay();
+        if (timeRemaining % 60 === 0) saveState(false);
+        if (timeRemaining <= 600) document.getElementById('timer').classList.add('timer-warning');
+        if (timeRemaining <= 0) {
+            clearInterval(timerInterval);
+            alert(currentLang === 'ar' ? "⏰ انتهى الوقت!" : "⏰ Time's up!");
+            gradeExam();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeRemaining / 60);
+    const s = timeRemaining % 60;
+    document.getElementById('timer').textContent = m.toString().padStart(2,'0') + ':' + s.toString().padStart(2,'0');
+}
+
+function toggleAnswers() {
+    answersVisible = !answersVisible;
+    document.querySelectorAll('.answer-box').forEach(el => el.classList.toggle('hidden', !answersVisible));
+    saveState(false);
+}
+
+function gradeExam() {
+    let correctCount = 0;
+    const sectionScores = new Array(TOTAL_SECTIONS).fill(0);
+    
+    for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+        const sel = document.querySelector('input[name="q'+i+'"]:checked');
+        const li = document.getElementById('q-' + i);
+        if (li) {
+            const isCorrect = sel && sel.value === correctAnswersMap[i];
+            if (isCorrect) {
+                correctCount++;
+                li.classList.add('correct');
+                li.classList.remove('incorrect');
+                sectionScores[Math.floor(i / QUESTIONS_PER_SECTION)]++;
+            } else {
+                li.classList.add('incorrect');
+                li.classList.remove('correct');
+            }
+        }
+    }
+    
+    const score = Math.round((correctCount / TOTAL_QUESTIONS) * 100);
+    document.getElementById('res-total').textContent = score + ' / 100';
+    document.getElementById('res-name').textContent = document.getElementById('studentName').value || (currentLang === 'ar' ? 'بطل' : 'Champion');
+    document.getElementById('res-date').textContent = new Date().toLocaleDateString(currentLang === 'ar' ? 'ar-AE' : 'en-US');
+    
+    const pc = document.getElementById('sections-performance');
+    pc.innerHTML = '';
+    examData.sections.forEach((s, idx) => {
+        pc.innerHTML += '<div class="flex justify-between items-center p-3 bg-white rounded-lg"><span class="text-gray-700">' + s.title[currentLang] + '</span><span class="font-bold text-amber-700">' + sectionScores[idx] + '/' + QUESTIONS_PER_SECTION + '</span></div>';
+    });
+    
+    const badge = document.getElementById('success-badge');
+    document.getElementById('success-percent').textContent = score + '%';
+    
+    if (currentLang === 'ar') {
+        if (score >= 90) { badge.textContent = '🌟 ممتاز جداً!'; badge.className = 'success-badge grade-excellent'; }
+        else if (score >= 75) { badge.textContent = '👏 ممتاز!'; badge.className = 'success-badge grade-good'; }
+        else if (score >= 50) { badge.textContent = ' جيد'; badge.className = 'success-badge grade-pass'; }
+        else { badge.textContent = '💪 حاول مرة أخرى'; badge.className = 'success-badge grade-fail'; }
+    } else {
+        if (score >= 90) { badge.textContent = ' Outstanding!'; badge.className = 'success-badge grade-excellent'; }
+        else if (score >= 75) { badge.textContent = '👏 Excellent!'; badge.className = 'success-badge grade-good'; }
+        else if (score >= 50) { badge.textContent = '👍 Good'; badge.className = 'success-badge grade-pass'; }
+        else { badge.textContent = '💪 Try Again'; badge.className = 'success-badge grade-fail'; }
+    }
+    
+    document.getElementById('results-panel').classList.remove('hidden');
+    document.getElementById('results-panel').scrollIntoView({ behavior: 'smooth' });
+    if (timerInterval) clearInterval(timerInterval);
+}
+
+function sendResultsToEmail() {
+    const btn = document.getElementById('sendEmailBtn');
+    const status = document.getElementById('emailStatus');
+    btn.disabled = true;
+    btn.textContent = currentLang === 'ar' ? '⏳ جاري الإرسال...' : '⏳ Sending...';
+    
+    const name = document.getElementById('studentName').value || 'N/A';
+    const studentClass = document.getElementById('studentClass').value || 'N/A';
+    const date = document.getElementById('examDate').value || new Date().toLocaleDateString();
+    const score = document.getElementById('res-total').textContent;
+    const successRate = document.getElementById('success-percent').textContent;
+    const badge = document.getElementById('success-badge').textContent;
+    
+    let questionsHTML = '<div style="font-family:Arial; direction:rtl;">';
+    questionsHTML += '<h2> ' + (currentLang === 'ar' ? 'نتيجة امتحان نظرية فيثاغورس' : 'Pythagorean Theorem Exam Result') + '</h2>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'الاسم' : 'Name') + ':</strong> ' + name + '</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'الشعبة' : 'Class') + ':</strong> ' + studentClass + '</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'التاريخ' : 'Date') + ':</strong> ' + date + '</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'الدرجة' : 'Score') + ':</strong> ' + score + ' (' + successRate + ')</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'التقدير' : 'Grade') + ':</strong> ' + badge + '</p>';
+    questionsHTML += '<hr><h3>' + (currentLang === 'ar' ? 'تفاصيل الإجابات:' : 'Answer Details:') + '</h3><table style="width:100%; border-collapse:collapse;">';
+    questionsHTML += '<tr style="background:#d97706; color:white;"><th style="padding:8px; border:1px solid #ddd;">#</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'السؤال' : 'Question') + '</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'إجابة الطالب' : 'Student Answer') + '</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'الصحيحة' : 'Correct') + '</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'النتيجة' : 'Result') + '</th></tr>';
+    
+    let globalIdx = 0;
+    examData.sections.forEach((section) => {
+        questionsHTML += '<tr style="background:#fef3c7;"><td colspan="5" style="padding:8px; font-weight:bold; border:1px solid #ddd;">' + section.title.ar + '</td></tr>';
+        section.questions.forEach((q) => {
+            const sel = document.querySelector('input[name="q'+globalIdx+'"]:checked');
+            const sv = sel ? sel.value : null;
+            const cv = correctAnswersMap[globalIdx];
+            const ic = sv === cv;
+            let sat = currentLang === 'ar' ? '❌ لم يجب' : '❌ No answer';
+            let sac = '#dc2626';
+            if (sv) {
+                const si = sv.charCodeAt(0) - 97;
+                sat = q.options[si].ar;
+                sac = ic ? '#16a34a' : '#dc2626';
+            }
+            const cat = q.options[q.correct].ar;
+            const rb = ic ? '#f0fdf4' : '#fef2f2';
+            questionsHTML += '<tr style="background:' + rb + ';"><td style="padding:8px; border:1px solid #ddd; text-align:center;">' + (globalIdx+1) + '</td><td style="padding:8px; border:1px solid #ddd;">' + q.q.ar + '</td><td style="padding:8px; border:1px solid #ddd; color:' + sac + ';">' + sat + '</td><td style="padding:8px; border:1px solid #ddd; color:#16a34a;">' + cat + '</td><td style="padding:8px; border:1px solid #ddd; text-align:center;">' + (ic?'✅':'❌') + '</td></tr>';
+            globalIdx++;
+        });
+    });
+    questionsHTML += '</table></div>';
+    
+    const templateParams = {
+        to_email: TARGET_EMAIL,
+        student_name: name,
+        student_class: studentClass,
+        exam_date: date,
+        total_score: score,
+        success_rate: successRate,
+        grade: badge,
+        answers_table: questionsHTML
+    };
+    
+    emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
+        .then(() => {
+            status.textContent = currentLang === 'ar' ? '✅ تم الإرسال بنجاح!' : '✅ Sent successfully!';
+            status.style.color = '#16a34a';
+            btn.textContent = currentLang === 'ar' ? '✓ تم' : '✓ Sent';
+            alert(currentLang === 'ar' ? 'تم إرسال النتيجة للمعلم بنجاح!' : 'Result sent to teacher successfully!');
+        })
+        .catch((error) => {
+            status.textContent = currentLang === 'ar' ? '❌ فشل الإرسال' : '❌ Failed to send';
+            status.style.color = '#dc2626';
+            btn.disabled = false;
+            btn.textContent = currentLang === 'ar' ? '📧 حاول مرة أخرى' : '📧 Try Again';
+            alert(currentLang === 'ar' ? 'فشل الإرسال: ' + error.text : 'Failed: ' + error.text);
+        });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    const saved = loadState();
+    if (saved && saved.seed) {
+        currentSeed = saved.seed;
+        currentLang = saved.lang || 'ar';
+        timeRemaining = saved.timeRemaining !== undefined ? saved.timeRemaining : TOTAL_TIME;
+        answersVisible = saved.answersVisible || false;
+        document.getElementById('btn-ar').classList.toggle('active', currentLang === 'ar');
+        document.getElementById('btn-en').classList.toggle('active', currentLang === 'en');
+        document.body.classList.toggle('en-mode', currentLang === 'en');
+    } else {
+        currentSeed = Date.now();
+    }
+    prepareShuffledExam();
+    renderExam();
+    if (saved) {
+        if (saved.studentName) document.getElementById('studentName').value = saved.studentName;
+        if (saved.studentClass) document.getElementById('studentClass').value = saved.studentClass;
+        if (saved.examDate) document.getElementById('examDate').value = saved.examDate;
+        if (saved.answers) restoreAnswers(saved.answers);
+    }
+    setupAnswerListeners();
+    setupInputListeners();
+    startTimer();
+});
+window.addEventListener('beforeunload', () => saveState(false));
+</script>
+</body>
+</html>
